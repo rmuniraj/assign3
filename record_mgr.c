@@ -1,12 +1,3 @@
-
-/****************************************
- * Record Manager - Implementation      *
- *       *	*	*	*	*
- * Author: vjonnala and team		*
- *	*	*	*	*	*
- * Date : 04/24/2015			*
- ****************************************/
-
 #include "dberror.h"
 #include "expr.h"
 #include "tables.h"
@@ -25,12 +16,6 @@
 #define FIELD_DELIMITER ","
 #define TUPLE_DELIMITER ";"
 
-/* ------------------- Record Manager Interface Pool Handling ----------------------------*/
-
-/*
- The record manager handles tables with a fixed schema. Clients can insert records, delete records, update records, and scan through the records in a table. A scan is associated with a search condition and only returns records that match the search condition.
-*/
-
 typedef struct Multiple_Scan_Handler
 {
 Expr* cond;
@@ -47,10 +32,6 @@ RC shutdownRecordManager() {
 	prevSlot = 0;prevRecSlot = 0;count = 0;flag = 0;pageNo=1;
 	return RC_OK;
 }
-
-/*
-Serialize data helps in converting all the data types to  charecter pointer format.
-*/
 char* serialize_data(char* schema_info, Schema *schema) {
 	char* numberofAttributes = (char *) malloc(1);
 	// Convert the integer to char* using sprintnf
@@ -84,9 +65,7 @@ char* serialize_data(char* schema_info, Schema *schema) {
 
 	return schema_info;
 }
-/*
-Create tables create a table with the given schema.
-*/
+
 RC createTable(char *name, Schema *schema) {
 
 	BM_BufferPool *bm = MAKE_POOL();
@@ -113,9 +92,6 @@ RC createTable(char *name, Schema *schema) {
 	return RC_OK;
 }
 
-/*
-De-Serialize data converts all the charecter pointer variables to the required data type in the schema.
-*/
 RM_TableData* deserialize_data(RM_TableData *rel, char *data, Schema *schema) {
 
 	int i = 0, j = 0, k = 0, l = 0;
@@ -176,9 +152,6 @@ RM_TableData* deserialize_data(RM_TableData *rel, char *data, Schema *schema) {
 	return rel;
 }
 
-/*
-Open Table opens the table with records and de-serializes the data back.
-*/
 RC openTable(RM_TableData *rel, char *name) {
 	BM_BufferPool *bm = MAKE_POOL();
 	BM_PageHandle *bm_ph = MAKE_PAGE_HANDLE();
@@ -250,9 +223,6 @@ RC insertRecord(RM_TableData *rel, Record *record) {
 	return RC_OK;
 
 }
-/*
-Delete Record deletes the record with the specified condition and inserts tombstones(-) in their space. 
-*/
 RC deleteRecord(RM_TableData *rel, RID id) {
 	
 	int i = 0;char *alpha=malloc(16);char *updated_rec_data = malloc(PAGE_SIZE);
@@ -261,7 +231,7 @@ RC deleteRecord(RM_TableData *rel, RID id) {
 	BM_BufferPool *bm = (BM_BufferPool *) rel->mgmtData;
 	BM_PageHandle *bm_ph = MAKE_PAGE_HANDLE();
 	pinPage(bm,bm_ph,page);
-	//Inserting Tombstone charecter in place of delete record.
+
 	while(i<16){
 		alpha = strcat(alpha,"-");i++;			
 	}
@@ -275,10 +245,6 @@ RC deleteRecord(RM_TableData *rel, RID id) {
 
 	return RC_OK;
 }
-
-/*
-Update Records update the record with the given specification
-*/
 RC updateRecord(RM_TableData *rel, Record *record) {
 
 	RID rid=record->id;char *rec_data;char *updated_rec_data = malloc(PAGE_SIZE);
@@ -309,9 +275,6 @@ RC updateRecord(RM_TableData *rel, Record *record) {
 	return RC_OK;
 }
 
-/*
-Get Record searched the record with given condition.
-*/
 RC getRecord(RM_TableData *rel, RID id, Record *record) {
 	record->id=id;
 
@@ -409,10 +372,6 @@ int getRecordSize(Schema *schema) {
 	return record_size - 2;
 
 }
-
-/*
-Create Schema with the given schema variables.
-*/
 Schema *createSchema(int numAttr, char **attrNames, DataType *dataTypes,
 		int *typeLength, int keySize, int *keys) {
 	Schema* schema = (Schema*) malloc(sizeof(Schema));
@@ -450,10 +409,6 @@ RC freeRecord(Record *record) {
 	record->data=NULL;
 	return RC_OK;
 }
-
-/*
-getAttr gets the attribute with the required format.
-*/
 RC getAttr(Record *record, Schema *schema, int attrNum, Value **value) {
 
 	char *a,*temp_buff[2];int i=0;
@@ -488,10 +443,6 @@ RC getAttr(Record *record, Schema *schema, int attrNum, Value **value) {
 	
 	return RC_OK;
 }
-
-/*
-setAttr sets the attribute with the required schema values.
-*/
 RC setAttr(Record *record, Schema *schema, int attrNum, Value *value) {
 	int temp_size; int i = 0;char *data1 = record->data;
 	char* temp_value = malloc(16);
@@ -559,8 +510,5 @@ RC setAttr(Record *record, Schema *schema, int attrNum, Value *value) {
 	//fclose(fpGS);
 	return numberOfBlocks;
  }
-/**********************************************
- *       *	*	*	*	*     *
- * END - Record Manager - Implementation      *
- *       *	*	*	*	*     *
- ***********************************************/
+
+
