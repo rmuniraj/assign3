@@ -21,13 +21,15 @@ For executing mandatory and additional test cases:
 1) In the terminal,navigate to the assignment directory.
 
 2) Type: 
-	make -f makefile
+	make -f makefile2
+	make -f makefile3
+	make -f makefile_exp
 
-**** For random scans of test cases ***
-3) ./assign1
+**** For multiple scans of test cases and tombstone check ***
+3) ./test_assign3_1
 
-**** For multiple scans of test cases and tombstone check***
-4) ./assign2
+**** For Primary Key Violation Check ***
+4) ./test_assign3_3
 
 **** For testing test expression ***
 5) ./test_expr
@@ -43,9 +45,6 @@ For executing mandatory and additional test cases:
 2)PRIMARY KEY VIOLATION:- For the given primary key on first attribute in test case, we have implemented a violation check on the 
   primary key column.When a record with the same key is inserted, primary key violation is checked and that record is not inserted.
 
-3)MENU BASED USER INTERFACE:-In this, we implemented a simple menu based user interface, which Creates-Inserts-Updates the table with
-  its records and deletes the table.For this implementation, number of columns and data types of the columns are fixed. Since,we dont 
-  want to edit the Schema mentioned in the test case.
 
 *****************************************************************
 
@@ -191,12 +190,7 @@ This function destroys the relative page file and returns the return code.
 	-----------------
 i)  test_assign3_1.c
 	This test case implements the actual test case.
-ii) test_assign3_2.c
-	This test case implements a simple menu based user interface.
-	Following are the mandatory assumptions we made, if this fails, the test case will FAIL.
-	*) The Number of Columns in a table are fixed to 3 (Since, the given test case handles for 3 attributes only).
-	*) The data types of three columns are fixed to INT,STRING,INT (Since, the given test case has these three definitions). 
-iii)test_assign3_3.c
+ii) test_assign3_3.c
 	This test case implements a check for Primary Key Violation.
 
 	Error Checks
@@ -206,6 +200,12 @@ We have included the following additional error checks
 
   RC_RM_GET_FAILED 206
   RC_RM_SCAN_FAILED 207
+
+NOTE:-
+-----
+OUR CODE WORKS FINE IN OUR LAPTOP.
+BUT WHILE IN FOURIER SERVER , IT THROWS AN EXCEPTION NEAR free(record) IN ALL THE METHODS IN TEST CASE.
+WE ARE ATTACHING YOU THE SCREENSHOTS.
 
 *****************************************************************
 
